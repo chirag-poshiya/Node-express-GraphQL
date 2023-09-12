@@ -1,9 +1,9 @@
-const bcrypt = require("bcryptjs");
 const validator = require("validator");
-const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const User = require("../models/user");
-const Post = require("../models/post");
+const jwt = require("jsonwebtoken");
 const { clearImage } = require('../util/file')
+const Post = require("../models/post");
 
 module.exports = {
     createUser: async function ({ userInput }, req) {
@@ -21,8 +21,8 @@ module.exports = {
 
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.data = errors;
             error.code = 422;
+            error.data = errors;
             throw error;
         }
         const existingUser = await User.findOne({ email: userInput.email });
@@ -33,8 +33,8 @@ module.exports = {
 
         const hashedPw = await bcrypt.hash(userInput.password, 12);
         const user = new User({
-            email: userInput.email,
             name: userInput.name,
+            email: userInput.email,
             password: hashedPw,
         });
 
@@ -52,7 +52,7 @@ module.exports = {
         const isEqual = bcrypt.compare(password, user.password);
         if (!isEqual) {
             const error = new Error("Password is incorrect.");
-            error.code = 401;
+            error.code = 401; //401 Not authenticate
             throw error;
         }
 
@@ -203,8 +203,8 @@ module.exports = {
         }
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.data = errors;
             error.code = 422;
+            error.data = errors;
             throw error;
         }
 
