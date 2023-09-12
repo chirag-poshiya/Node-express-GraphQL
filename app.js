@@ -1,14 +1,14 @@
 const path = require('path');
 
-const express = require('express');
 const bodyParser = require('body-parser');
+const express = require('express');
 const mongoose = require('mongoose');
-const multer = require('multer');
 const  graphqlHttp  = require('express-graphql').graphqlHTTP;
-const graphqlSchema = require('./graphql/schema');
+const multer = require('multer');
 const graphqlResolver = require('./graphql/resolvers');
-const auth = require('./middleware/auth');
+const graphqlSchema = require('./graphql/schema');
 const { clearImage } = require('./util/file')
+const auth = require('./middleware/auth');
 
 const app = express();
 
@@ -23,8 +23,8 @@ const fileStorage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === 'image/png' ||
     file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/png' ||
     file.mimetype === 'image/jpeg'
   ) {
     cb(null, true);
@@ -72,8 +72,8 @@ app.put('/post-image', (req, res, next) => {
 
 
 app.use('/graphql', graphqlHttp({
-  schema: graphqlSchema,
   rootValue: graphqlResolver,
+  schema: graphqlSchema,
   graphiql:true,
   formatError(err){
     if(!err.originalError){
@@ -88,9 +88,9 @@ app.use('/graphql', graphqlHttp({
 
 app.use((error, req, res, next) => {
   console.log(error);
-  const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
+  const status = error.statusCode || 500;
   res.status(status).json({ message: message, data: data });
 });
 
