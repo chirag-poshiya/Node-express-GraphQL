@@ -14,8 +14,8 @@ module.exports = buildSchema(`
     type User {
         _id: ID!
         email: String! 
-        name: String!
         status: String!
+        name: String!
         password: String
         posts: [Post!]!
     }
