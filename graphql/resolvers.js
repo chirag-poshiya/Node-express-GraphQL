@@ -21,8 +21,8 @@ module.exports = {
 
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.code = 422;
             error.data = errors;
+            error.code = 422;
             throw error;
         }
         const existingUser = await User.findOne({ email: userInput.email });
@@ -34,8 +34,8 @@ module.exports = {
         const hashedPw = await bcrypt.hash(userInput.password, 12);
         const user = new User({
             name: userInput.name,
-            email: userInput.email,
             password: hashedPw,
+            email: userInput.email,
         });
 
         const createdUser = await user.save();
@@ -58,8 +58,8 @@ module.exports = {
 
         const token = jwt.sign(
             {
-                userId: user._id.toString(),
                 email: user.email,
+                userId: user._id.toString(),
             },
             "thisismysecret",
             { expiresIn: "1h" }
@@ -88,8 +88,8 @@ module.exports = {
         }
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.data = errors;
             error.code = 422;
+            error.data = errors;
             throw error;
         }
         const user = await User.findById(req.userId);
@@ -100,9 +100,9 @@ module.exports = {
         }
 
         const post = new Post({
-            title: postInput.title,
             content: postInput.content,
             imageUrl: postInput.imageUrl,
+            title: postInput.title,
             creator: user,
         });
 
@@ -114,8 +114,8 @@ module.exports = {
             ...createdPost,
             ...createdPost._doc,
             _id: createdPost._id.toString(),
-            createdAt: createdPost.createdAt.toISOString(),
             updatedAt: createdPost.updatedAt.toISOString(),
+            createdAt: createdPost.createdAt.toISOString(),
         };
     },
     posts: async function ({ page }, req) {
@@ -141,8 +141,8 @@ module.exports = {
                 return {
                     ...p._doc,
                     _id: p._id.toString(),
-                    createdAt: p.createdAt.toISOString(),
                     updatedAt: p.updatedAt.toISOString()
+                    createdAt: p.createdAt.toISOString(),
                 }
             }), totalPosts: totalPosts
         };
@@ -203,8 +203,8 @@ module.exports = {
         }
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.code = 422;
             error.data = errors;
+            error.code = 422;
             throw error;
         }
 
@@ -216,8 +216,8 @@ module.exports = {
         const updatedPost = await post.save();
         return {
             ...updatedPost._doc,
-            _id: updatedPost._id.toString(),
             createdAt: updatedPost.createdAt.toISOString(),
+            _id: updatedPost._id.toString(),
             updatedAt: updatedPost.updatedAt.toISOString()
         }
 
