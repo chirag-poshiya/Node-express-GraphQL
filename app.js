@@ -3,12 +3,12 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
-const  graphqlHttp  = require('express-graphql').graphqlHTTP;
 const multer = require('multer');
+const  graphqlHttp  = require('express-graphql').graphqlHTTP;
 const graphqlResolver = require('./graphql/resolvers');
 const graphqlSchema = require('./graphql/schema');
-const { clearImage } = require('./util/file')
 const auth = require('./middleware/auth');
+const { clearImage } = require('./util/file')
 
 const app = express();
 
@@ -23,8 +23,8 @@ const fileStorage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === 'image/jpg' ||
     file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
     file.mimetype === 'image/jpeg'
   ) {
     cb(null, true);
@@ -43,8 +43,8 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
-    'Access-Control-Allow-Methods',
     'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+    'Access-Control-Allow-Methods',
   );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if(req.method === "OPTIONS"){
@@ -72,25 +72,25 @@ app.put('/post-image', (req, res, next) => {
 
 
 app.use('/graphql', graphqlHttp({
-  rootValue: graphqlResolver,
   schema: graphqlSchema,
+  rootValue: graphqlResolver,
   graphiql:true,
   formatError(err){
     if(!err.originalError){
       return err;
     }
-    const data = err.originalError.data;
     const message = err.message || "An error occured.";
     const code = err.originalError.code || 500;
+    const data = err.originalError.data;
     return {message: message, status: code, data: data}
   } 
 }));
 
 app.use((error, req, res, next) => {
   console.log(error);
-  const message = error.message;
   const data = error.data;
   const status = error.statusCode || 500;
+  const message = error.message;
   res.status(status).json({ message: message, data: data });
 });
 
