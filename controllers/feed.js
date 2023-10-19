@@ -4,8 +4,8 @@ const path = require('path');
 const { validationResult } = require('express-validator/check');
 
 const io = require('../socket');
-const Post = require('../models/post');
 const User = require('../models/user');
+const Post = require('../models/post');
 
 exports.getPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
@@ -19,8 +19,8 @@ exports.getPosts = async (req, res, next) => {
       .limit(perPage);
 
     res.status(200).json({
-      message: 'Fetched posts successfully.',
       posts: posts,
+      message: 'Fetched posts successfully.',
       totalItems: totalItems
     });
   } catch (err) {
@@ -47,10 +47,10 @@ exports.createPost = async (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
   const post = new Post({
-    title: title,
-    content: content,
-    imageUrl: imageUrl,
     creator: req.userId
+    content: content,
+    title: title,
+    imageUrl: imageUrl,
   });
   try {
     await post.save();
@@ -62,8 +62,8 @@ exports.createPost = async (req, res, next) => {
       post: { ...post._doc, creator: { _id: req.userId, name: user.name } }
     });
     res.status(201).json({
-      message: 'Post created successfully!',
       post: post,
+      message: 'Post created successfully!',
       creator: { _id: user._id, name: user.name }
     });
   } catch (err) {
@@ -75,8 +75,8 @@ exports.createPost = async (req, res, next) => {
 };
 
 exports.getPost = async (req, res, next) => {
-  const postId = req.params.postId;
   const post = await Post.findById(postId);
+  const postId = req.params.postId;
   try {
     if (!post) {
       const error = new Error('Could not find post.');
@@ -100,8 +100,8 @@ exports.updatePost = async (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  const title = req.body.title;
   const content = req.body.content;
+  const title = req.body.title;
   let imageUrl = req.body.image;
   if (req.file) {
     imageUrl = req.file.path;
@@ -126,12 +126,12 @@ exports.updatePost = async (req, res, next) => {
     if (imageUrl !== post.imageUrl) {
       clearImage(post.imageUrl);
     }
-    post.title = title;
     post.imageUrl = imageUrl;
     post.content = content;
+    post.title = title;
     const result = await post.save();
-    io.getIO().emit('posts', { action: 'update', post: result });
     res.status(200).json({ message: 'Post updated!', post: result });
+    io.getIO().emit('posts', { action: 'update', post: result });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
