@@ -140,8 +140,8 @@ module.exports = {
             posts: posts.map(p => {
                 return {
                     ...p._doc,
-                    _id: p._id.toString(),
                     createdAt: p.createdAt.toISOString(),
+                    _id: p._id.toString(),
                     updatedAt: p.updatedAt.toISOString()
                 }
             }), totalPosts: totalPosts
@@ -163,8 +163,8 @@ module.exports = {
 
         return {
             ...post._doc,
-            _id: post._id.toString(),
             createdAt: post.createdAt.toISOString(),
+            _id: post._id.toString(),
             updatedAt: post.updatedAt.toISOString()
         }
     },
@@ -203,21 +203,21 @@ module.exports = {
         }
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.data = errors;
             error.code = 422;
+            error.data = errors;
             throw error;
         }
 
-        post.title = postInput.title;
         post.content = postInput.content;
+        post.title = postInput.title;
         if(postInput.imageUrl !== 'undefined'){
             post.imageUrl = postInput.imageUrl;
         }
         const updatedPost = await post.save();
         return {
             ...updatedPost._doc,
-            createdAt: updatedPost.createdAt.toISOString(),
             _id: updatedPost._id.toString(),
+            createdAt: updatedPost.createdAt.toISOString(),
             updatedAt: updatedPost.updatedAt.toISOString()
         }
 
