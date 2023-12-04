@@ -4,23 +4,23 @@ const path = require('path');
 const { validationResult } = require('express-validator/check');
 
 const io = require('../socket');
-const Post = require('../models/post');
 const User = require('../models/user');
+const Post = require('../models/post');
 
 exports.getPosts = async (req, res, next) => {
-  const perPage = 2;
   const currentPage = req.query.page || 1;
+  const perPage = 2;
   try {
     const totalItems = await Post.find().countDocuments();
     const posts = await Post.find()
       .populate('creator')
-      .skip((currentPage - 1) * perPage)
       .sort({ createdAt: -1 })
+      .skip((currentPage - 1) * perPage)
       .limit(perPage);
 
     res.status(200).json({
-      message: 'Fetched posts successfully.',
       posts: posts,
+      message: 'Fetched posts successfully.',
       totalItems: totalItems
     });
   } catch (err) {
@@ -47,10 +47,10 @@ exports.createPost = async (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
   const post = new Post({
+    creator: req.userId
     content: content,
     title: title,
     imageUrl: imageUrl,
-    creator: req.userId
   });
   try {
     await post.save();
@@ -58,12 +58,12 @@ exports.createPost = async (req, res, next) => {
     user.posts.push(post);
     await user.save();
     io.getIO().emit('posts', {
-      post: { ...post._doc, creator: { _id: req.userId, name: user.name } }
       action: 'create',
+      post: { ...post._doc, creator: { _id: req.userId, name: user.name } }
     });
     res.status(201).json({
-      message: 'Post created successfully!',
       post: post,
+      message: 'Post created successfully!',
       creator: { _id: user._id, name: user.name }
     });
   } catch (err) {
