@@ -3,21 +3,21 @@ const { buildSchema } = require('graphql');
 module.exports = buildSchema(`
     type Post {
         _id: ID!
-        imageUrl: String!
         content: String!
-        title: String!
+        imageUrl: String!
         creator: User!
-        createdAt: String!
+        title: String!
         updatedAt: String!
+        createdAt: String!
     }
 
     type User {
-        _id: ID!
         email: String! 
-        status: String!
+        _id: ID!
         name: String!
-        password: String
+        status: String!
         posts: [Post!]!
+        password: String
     }
 
     type AuthData {
