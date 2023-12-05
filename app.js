@@ -1,16 +1,16 @@
 const path = require('path');
 
-const bodyParser = require('body-parser');
 const express = require('express');
-const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const multer = require('multer');
-const  graphqlHttp  = require('express-graphql').graphqlHTTP;
+const mongoose = require('mongoose');
 const graphqlSchema = require('./graphql/schema');
+const  graphqlHttp  = require('express-graphql').graphqlHTTP;
 const graphqlResolver = require('./graphql/resolvers');
-const { clearImage } = require('./util/file')
 const auth = require('./middleware/auth');
-const app = express();
+const { clearImage } = require('./util/file')
 
+const app = express();
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
