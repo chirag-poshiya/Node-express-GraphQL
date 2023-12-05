@@ -14,18 +14,18 @@ exports.getPosts = async (req, res, next) => {
     const totalItems = await Post.find().countDocuments();
     const posts = await Post.find()
       .populate('creator')
-      .sort({ createdAt: -1 })
       .skip((currentPage - 1) * perPage)
+      .sort({ createdAt: -1 })
       .limit(perPage);
 
     res.status(200).json({
-      posts: posts,
       message: 'Fetched posts successfully.',
+      posts: posts,
       totalItems: totalItems
     });
   } catch (err) {
     if (!err.statusCode) {
-      err.statusCode = 500;
+      err.statusCode = 500; //Error code 
     }
     next(err);
   }
