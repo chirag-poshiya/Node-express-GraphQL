@@ -23,8 +23,8 @@ const fileStorage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === 'image/jpg' ||
     file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
     file.mimetype === 'image/jpeg'
   ) {
     cb(null, true);
@@ -72,16 +72,16 @@ app.put('/post-image', (req, res, next) => {
 
 
 app.use('/graphql', graphqlHttp({
-  rootValue: graphqlResolver,
   graphiql:true,
+  rootValue: graphqlResolver,
   schema: graphqlSchema,
   formatError(err){
     if(!err.originalError){
       return err;
     }
-    const code = err.originalError.code || 500;
-    const message = err.message || "An error occured.";
+    const message = err.message || "An error occured."; // error message
     const data = err.originalError.data;
+    const code = err.originalError.code || 500;
     return {message: message, status: code, data: data}
   } 
 }));
