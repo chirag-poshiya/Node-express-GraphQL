@@ -88,15 +88,15 @@ app.use('/graphql', graphqlHttp({
 
 app.use((error, req, res, next) => {
   // console.log(error);
-  const status = error.statusCode || 500;
   const data = error.data;
   const message = error.message;
+  const status = error.statusCode || 500;
   res.status(status).json({ message: message, data: data });
 });
 
 mongoose
   .connect(
-    'mongodb://localhost:27017/messages', {useNewUrlParser: true, useUnifiedTopology: true}
+    'mongodb://localhost:27017/messages', {useNewUrlParser: true, useUnifiedTopology: true} // connect mongodb
   )
   .then(result => {
     app.listen(8080);
