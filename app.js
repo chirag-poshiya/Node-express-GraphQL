@@ -99,7 +99,7 @@ mongoose
     'mongodb://localhost:27017/messages', {useNewUrlParser: true, useUnifiedTopology: true} // connect mongodb
   )
   .then(result => {
-    app.listen(8080); // Server port 
+    app.listen(8080); // Server port 8080
     
     
   })
