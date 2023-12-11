@@ -43,13 +43,13 @@ exports.createPost = async (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  const imageUrl = req.file.path;
   const title = req.body.title;
+  const imageUrl = req.file.path;
   const content = req.body.content;
   const post = new Post({
     content: content,
-    title: title,
     imageUrl: imageUrl,
+    title: title,
     creator: req.userId
   });
   try {
@@ -62,8 +62,8 @@ exports.createPost = async (req, res, next) => {
       post: { ...post._doc, creator: { _id: req.userId, name: user.name } }
     });
     res.status(201).json({
-      post: post,
       message: 'Post created successfully!',
+      post: post,
       creator: { _id: user._id, name: user.name }
     });
   } catch (err) {
@@ -93,15 +93,15 @@ exports.getPost = async (req, res, next) => {
 };
 
 exports.updatePost = async (req, res, next) => {
-  const postId = req.params.postId;
   const errors = validationResult(req);
+  const postId = req.params.postId;
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed, entered data is incorrect.');
     error.statusCode = 422;
     throw error;
   }
-  const content = req.body.content;
   const title = req.body.title;
+  const content = req.body.content;
   let imageUrl = req.body.image;
   if (req.file) {
     imageUrl = req.file.path;
@@ -126,8 +126,8 @@ exports.updatePost = async (req, res, next) => {
     if (imageUrl !== post.imageUrl) {
       clearImage(post.imageUrl);
     }
-    post.imageUrl = imageUrl;
     post.content = content;
+    post.imageUrl = imageUrl;
     post.title = title;
     const result = await post.save();
     res.status(200).json({ message: 'Post updated!', post: result });
