@@ -8,20 +8,20 @@ const User = require('../models/user'); // Include User Model
 const Post = require('../models/post'); //Include Post Model
 
 exports.getPosts = async (req, res, next) => {
-  const currentPage = req.query.page || 1;
   const perPage = 2;
+  const currentPage = req.query.page || 1;
   try {
     const totalItems = await Post.find().countDocuments();
     const posts = await Post.find()
       .populate('creator')
-      .skip((currentPage - 1) * perPage)
       .sort({ createdAt: -1 })
       .limit(perPage);
+      .skip((currentPage - 1) * perPage)
 
     res.status(200).json({
-      message: 'Fetched posts successfully.',
       posts: posts,
       totalItems: totalItems
+      message: 'Fetched posts successfully.',
     });
   } catch (err) {
     if (!err.statusCode) {
