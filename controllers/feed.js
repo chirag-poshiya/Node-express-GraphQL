@@ -3,7 +3,7 @@ const path = require('path'); // path
 
 const { validationResult } = require('express-validator/check');
 
-const io = require('../socket');
+const io = require('../socket'); // include socket
 const User = require('../models/user');
 const Post = require('../models/post');
 
