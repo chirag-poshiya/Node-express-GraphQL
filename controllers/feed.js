@@ -1,5 +1,5 @@
 const fs = require('fs'); // File System
-const path = require('path');
+const path = require('path'); // path
 
 const { validationResult } = require('express-validator/check');
 
