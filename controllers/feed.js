@@ -4,7 +4,7 @@ const path = require('path'); // path
 const { validationResult } = require('express-validator/check');
 
 const io = require('../socket'); // include socket
-const User = require('../models/user');
+const User = require('../models/user'); // Include User Model
 const Post = require('../models/post');
 
 exports.getPosts = async (req, res, next) => {
