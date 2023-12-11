@@ -20,8 +20,8 @@ exports.getPosts = async (req, res, next) => {
 
     res.status(200).json({
       posts: posts,
-      totalItems: totalItems
       message: 'Fetched posts successfully.',
+      totalItems: totalItems
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -47,10 +47,10 @@ exports.createPost = async (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
   const post = new Post({
-    creator: req.userId
     content: content,
     title: title,
     imageUrl: imageUrl,
+    creator: req.userId
   });
   try {
     await post.save();
