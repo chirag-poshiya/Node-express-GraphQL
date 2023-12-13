@@ -203,8 +203,8 @@ module.exports = {
         }
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.code = 422;
             error.data = errors;
+            error.code = 422;
             throw error;
         }
 
@@ -216,8 +216,8 @@ module.exports = {
         const updatedPost = await post.save();
         return {
             ...updatedPost._doc,
-            _id: updatedPost._id.toString(),
             createdAt: updatedPost.createdAt.toISOString(),
+            _id: updatedPost._id.toString(),
             updatedAt: updatedPost.updatedAt.toISOString()
         }
 
