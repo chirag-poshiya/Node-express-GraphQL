@@ -58,8 +58,8 @@ module.exports = {
 
         const token = jwt.sign(
             {
-                email: user.email,
                 userId: user._id.toString(),
+                email: user.email,
             },
             "thisismysecret",
             { expiresIn: "1h" }
@@ -88,8 +88,8 @@ module.exports = {
         }
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.code = 422;
             error.data = errors;
+            error.code = 422;
             throw error;
         }
         const user = await User.findById(req.userId);
@@ -100,8 +100,8 @@ module.exports = {
         }
 
         const post = new Post({
-            content: postInput.content,
             imageUrl: postInput.imageUrl,
+            content: postInput.content,
             title: postInput.title,
             creator: user,
         });
@@ -112,9 +112,9 @@ module.exports = {
 
         return {
             ...createdPost,
+            updatedAt: createdPost.updatedAt.toISOString(),
             ...createdPost._doc,
             _id: createdPost._id.toString(),
-            updatedAt: createdPost.updatedAt.toISOString(),
             createdAt: createdPost.createdAt.toISOString(),
         };
     },
@@ -132,16 +132,16 @@ module.exports = {
         const totalPosts = await Post.find().countDocuments();
         const posts = await Post.find()
             .sort({ createdAt: -1 })
-            .skip((page - 1) * perPage)
             .limit(perPage)
+            .skip((page - 1) * perPage)
             .populate("creator");
 
         return {
             posts: posts.map(p => {
                 return {
                     ...p._doc,
-                    createdAt: p.createdAt.toISOString(),
                     _id: p._id.toString(),
+                    createdAt: p.createdAt.toISOString(),
                     updatedAt: p.updatedAt.toISOString()
                 }
             }), totalPosts: totalPosts
@@ -163,8 +163,8 @@ module.exports = {
 
         return {
             ...post._doc,
-            createdAt: post.createdAt.toISOString(),
             _id: post._id.toString(),
+            createdAt: post.createdAt.toISOString(),
             updatedAt: post.updatedAt.toISOString()
         }
     },
