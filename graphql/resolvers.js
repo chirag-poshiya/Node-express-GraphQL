@@ -1,9 +1,9 @@
-const validator = require("validator");
 const bcrypt = require("bcryptjs");
-const User = require("../models/user");
+const validator = require("validator");
 const jwt = require("jsonwebtoken");
-const { clearImage } = require('../util/file')
+const User = require("../models/user");
 const Post = require("../models/post");
+const { clearImage } = require('../util/file')
 
 module.exports = {
     createUser: async function ({ userInput }, req) {
@@ -21,8 +21,8 @@ module.exports = {
 
         if (errors.length > 0) {
             const error = new Error("Invalid input.");
-            error.data = errors;
             error.code = 422;
+            error.data = errors;
             throw error;
         }
         const existingUser = await User.findOne({ email: userInput.email });
@@ -33,8 +33,8 @@ module.exports = {
 
         const hashedPw = await bcrypt.hash(userInput.password, 12);
         const user = new User({
-            name: userInput.name,
             password: hashedPw,
+            name: userInput.name,
             email: userInput.email,
         });
 
