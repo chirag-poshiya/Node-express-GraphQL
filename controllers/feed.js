@@ -3,24 +3,24 @@ const path = require('path'); // path
 
 const { validationResult } = require('express-validator/check');
 
-const io = require('../socket'); // include socket
 const User = require('../models/user'); // Include User Model
 const Post = require('../models/post'); //Include Post Model
+const io = require('../socket'); // include socket
 
 exports.getPosts = async (req, res, next) => {
-  const perPage = 2;
   const currentPage = req.query.page || 1;
+  const perPage = 2;
   try {
     const totalItems = await Post.find().countDocuments();
     const posts = await Post.find()
       .populate('creator')
-      .sort({ createdAt: -1 })
       .skip((currentPage - 1) * perPage)
+      .sort({ createdAt: -1 })
       .limit(perPage);
 
     res.status(200).json({
-      message: 'Fetched posts successfully.',
       posts: posts,
+      message: 'Fetched posts successfully.',
       totalItems: totalItems
     });
   } catch (err) {
