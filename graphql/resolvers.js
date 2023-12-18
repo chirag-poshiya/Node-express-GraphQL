@@ -1,8 +1,9 @@
 const bcrypt = require("bcryptjs");
-const validator = require("validator");
+
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const validator = require("validator");
 const Post = require("../models/post");
+const User = require("../models/user");
 const { clearImage } = require('../util/file')
 
 module.exports = {
