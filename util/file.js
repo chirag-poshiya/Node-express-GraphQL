@@ -1,5 +1,6 @@
-const fs = require('fs'); //File system
-const path = require('path'); // path
+const fs = require('fs'); 
+
+const path = require('path');  
 
 const clearImage = filePath => {
     filePath = path.join(__dirname, '..', filePath); // Define path for file
